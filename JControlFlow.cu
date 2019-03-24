@@ -6,11 +6,11 @@ __global__ void Control_Flow(int n_iterations, int num_arrays, int array_stride,
    Periodic BC, loop through each array, if 1 then flip the parity of idx to the right, else flip parity of idx to the left.
  */
 {
-        __shared__ int shared_boolean_array[256 * 32];
+        int shared_boolean_array[32];
 
         const unsigned int id = blockIdx.x * blockDim.x + threadIdx.x;
         const unsigned int array_address = id * array_stride;
-        const unsigned int shared_address = threadIdx.x * array_stride;
+        const unsigned int shared_address = 0;
 
         if(id < num_arrays) {
 
@@ -34,7 +34,6 @@ __global__ void Control_Flow(int n_iterations, int num_arrays, int array_stride,
                                                 shared_boolean_array[shared_address + array_stride - 1] = (side_val +1) % 2;
                                         }
                                 }
-
                                 else{
                                         if(j < array_stride -1) {
                                                 side_val = shared_boolean_array[shared_address + j + 1];
