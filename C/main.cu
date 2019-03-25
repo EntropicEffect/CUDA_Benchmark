@@ -122,7 +122,7 @@ int main(int argc, char * argv[]){
         printf("total GPU time %f \n", (timeForCopy + timeForComputation)/1000);
 
         cpuStart = clock();
-//        host_Control_Flow(num_iterations, num_arrays, array_stride, h_bool_array);
+        host_Control_Flow(num_iterations, num_arrays, array_stride, h_bool_array);
         cpuStop = clock();
         CPU_time = ((double)(cpuStop - cpuStart))/CLOCKS_PER_SEC;
 
