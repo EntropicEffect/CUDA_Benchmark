@@ -1,7 +1,8 @@
 import static jcuda.driver.JCudaDriver.*;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.io.*;
-
+import java.util.Scanner;
 import jcuda.*;
 import jcuda.driver.*;
 
@@ -11,7 +12,9 @@ public class main
     public static void main(String args[]) throws IOException
 
     {
-        int num_arrays = 100;
+        Scanner array_req = new Scanner(System.in);
+        System.out.println("Enter num of arrays: ");
+        int num_arrays = array_req.nextInt();
         int array_stride = 32;
         int num_iterations = 10000;
 
@@ -45,6 +48,9 @@ public class main
 
         CUdeviceptr deviceBoolArray = new CUdeviceptr();
         cuMemAlloc(deviceBoolArray, (num_arrays * array_stride) * Sizeof.INT);
+
+
+        long startGPUtime = System.nanoTime();
         cuMemcpyHtoD(deviceBoolArray, Pointer.to(hostBool), (num_arrays * array_stride) * Sizeof.INT);
 
 
@@ -66,9 +72,21 @@ public class main
         cuCtxSynchronize();
 
         cuMemcpyDtoH(Pointer.to(hostDeviceOut), deviceBoolArray, num_arrays * array_stride * Sizeof.INT);
+
+        long endGPUtime = System.nanoTime();
+
+        double GPUtime = (endGPUtime - startGPUtime)/(1000000);
+        System.out.println("GPU time: " + GPUtime + "ms \n");
+
         cuMemFree(deviceBoolArray);
 
+        long startCPUtime = System.nanoTime();
         host_Control_Flow(num_iterations, num_arrays, array_stride, hostBool);
+        long endCPUtime  = System.nanoTime();
+
+        double CPUtime = (endCPUtime - startCPUtime)/(1000000);
+
+        System.out.println("CPU time: " + CPUtime + "ms\n");
 
         int eq = isEqual(num_arrays * array_stride, hostDeviceOut, hostBool);
         if(eq == -1){
@@ -77,6 +95,8 @@ public class main
         else{
             System.out.println("Test failed.");
         }
+
+
 
     }
 
