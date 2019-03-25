@@ -13,7 +13,7 @@ public class main
     {
         int num_arrays = 100;
         int array_stride = 32;
-        int num_ierations = 10000;
+        int num_iterations = 10000;
 
         JCudaDriver.setExceptionsEnabled(true);
 
@@ -49,7 +49,7 @@ public class main
 
 
         Pointer kernelParameters = Pointer.to(
-                Pointer.to(new int[]{num_ierations}),
+                Pointer.to(new int[]{num_iterations}),
                 Pointer.to(new int[]{num_arrays}),
                 Pointer.to(new int[]{array_stride}),
                 Pointer.to(deviceBoolArray)
@@ -68,7 +68,7 @@ public class main
         cuMemcpyDtoH(Pointer.to(hostDeviceOut), deviceBoolArray, num_arrays * array_stride * Sizeof.INT);
         cuMemFree(deviceBoolArray);
 
-        host_Control_Flow(num_ierations, num_arrays, array_stride, hostBool);
+        host_Control_Flow(num_iterations, num_arrays, array_stride, hostBool);
 
         int eq = isEqual(num_arrays * array_stride, hostDeviceOut, hostBool);
         if(eq == -1){
