@@ -137,8 +137,6 @@ int main(int argc, char * argv[]){
         }
 
 
-        status = cudaMemcpy(h_output, d_output, num_elements * sizeof(int),cudaMemcpyDeviceToHost);
-
         cudaFree(h_bool_array);
         cudaFree(d_bool_array);
         cudaEventDestroy(start);

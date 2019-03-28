@@ -69,7 +69,7 @@ public class main
                 0, null,               // Shared memory size and stream
                 kernelParameters, null // Kernel- and extra parameters
         );
-        
+
         cuCtxSynchronize();
 
         cuMemcpyDtoH(Pointer.to(hostDeviceOut), deviceBoolArray, num_arrays * array_stride * Sizeof.INT);
